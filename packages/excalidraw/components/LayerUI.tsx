@@ -62,6 +62,7 @@ import { ImageExportDialog } from "./ImageExportDialog";
 import { Island } from "./Island";
 import { JSONExportDialog } from "./JSONExportDialog";
 import { LaserPointerButton } from "./LaserPointerButton";
+import { WhiteboardToolbar } from "./WhiteboardToolbar";
 
 import "./LayerUI.scss";
 import "./Toolbar.scss";
@@ -124,6 +125,7 @@ const DefaultMainMenu: React.FC<{
       </MainMenu.Group>
       <MainMenu.Separator />
       <MainMenu.DefaultItems.ToggleTheme />
+      <MainMenu.DefaultItems.ToggleWhiteboardMode />
       <MainMenu.DefaultItems.ChangeCanvasBackground />
     </MainMenu>
   );
@@ -311,11 +313,12 @@ const LayerUI = ({
                   isCompactStylesPanel,
               })}
             >
-              {shouldRenderSelectedShapeActions && renderSelectedShapeActions()}
+              {shouldRenderSelectedShapeActions && !appState.whiteboardMode && renderSelectedShapeActions()}
             </div>
           </Stack.Col>
           {!appState.viewModeEnabled &&
-            appState.openDialog?.name !== "elementLinkSelector" && (
+            appState.openDialog?.name !== "elementLinkSelector" &&
+            !appState.whiteboardMode && (
               <Section heading="shapes" className="shapes-section">
                 {(heading: React.ReactNode) => (
                   <div style={{ position: "relative" }}>
@@ -419,13 +422,6 @@ const LayerUI = ({
               editorInterface.formFactor === "phone",
               appState,
             )}
-            {!appState.viewModeEnabled &&
-              appState.openDialog?.name !== "elementLinkSelector" &&
-              // hide button when sidebar docked
-              (!isSidebarDocked ||
-                appState.openSidebar?.name !== DEFAULT_SIDEBAR.name) && (
-                <tunnels.DefaultSidebarTriggerTunnel.Out />
-              )}
             {shouldShowStats && (
               <Stats
                 app={app}
@@ -608,6 +604,16 @@ const LayerUI = ({
           >
             {renderWelcomeScreen && <tunnels.WelcomeScreenCenterTunnel.Out />}
             {renderFixedSideContainer()}
+            {appState.whiteboardMode &&
+              !appState.viewModeEnabled &&
+              appState.openDialog?.name !== "elementLinkSelector" && (
+                <WhiteboardToolbar
+                  appState={appState}
+                  app={app}
+                  setAppState={setAppState}
+                  actionManager={actionManager}
+                />
+              )}
             <Footer
               appState={appState}
               actionManager={actionManager}

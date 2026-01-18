@@ -90,7 +90,6 @@ import type {
   AppClassProperties,
   AppProps,
   UIAppState,
-  Zoom,
   AppState,
 } from "../types";
 import type { ActionManager } from "../actions/manager";
@@ -1276,19 +1275,30 @@ export const ShapesSwitcher = ({
 
 export const ZoomActions = ({
   renderAction,
-  zoom,
+  appState,
 }: {
   renderAction: ActionManager["renderAction"];
-  zoom: Zoom;
-}) => (
-  <Stack.Col gap={1} className={CLASSES.ZOOM_ACTIONS}>
-    <Stack.Row align="center">
-      {renderAction("zoomOut")}
-      {renderAction("resetZoom")}
-      {renderAction("zoomIn")}
-    </Stack.Row>
-  </Stack.Col>
-);
+  appState: UIAppState;
+}) => {
+  const showZoomLock = appState.whiteboardMode;
+
+  return (
+    <Stack.Col gap={1} className={CLASSES.ZOOM_ACTIONS}>
+      <Stack.Row align="center">
+        {renderAction("zoomOut")}
+        <div
+          className={clsx("zoom-reset-wrapper", {
+            "zoom-reset-wrapper--lock": showZoomLock,
+          })}
+        >
+          {renderAction("resetZoom")}
+          {showZoomLock && renderAction("toggleZoomLock")}
+        </div>
+        {renderAction("zoomIn")}
+      </Stack.Row>
+    </Stack.Col>
+  );
+};
 
 export const UndoRedoActions = ({
   renderAction,

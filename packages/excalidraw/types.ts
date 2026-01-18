@@ -458,6 +458,14 @@ export interface AppState {
   // and also remove groupId from this map
   lockedMultiSelections: { [groupId: string]: true };
   bindMode: BindMode;
+  /** classroom whiteboard mode - simplified toolbar at bottom */
+  whiteboardMode: boolean;
+  /** lock touch zoom in whiteboard mode */
+  zoomLocked: boolean;
+  /** whiteboard toolbar UI scale (1 = default) */
+  whiteboardToolbarScale: number;
+  /** whiteboard side controls UI scale (1 = default) */
+  whiteboardSideControlsScale: number;
 }
 
 export type SearchMatch = {

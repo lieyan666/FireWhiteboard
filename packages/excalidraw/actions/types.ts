@@ -89,9 +89,12 @@ export type ActionName =
   | "zoomIn"
   | "zoomOut"
   | "resetZoom"
+  | "toggleZoomLock"
   | "zoomToFit"
   | "zoomToFitSelection"
   | "zoomToFitSelectionInViewport"
+  | "movePageLeft"
+  | "movePageRight"
   | "changeFontFamily"
   | "changeTextAlign"
   | "changeVerticalAlign"
@@ -142,7 +145,8 @@ export type ActionName =
   | "wrapSelectionInFrame"
   | "toggleLassoTool"
   | "toggleShapeSwitch"
-  | "togglePolygon";
+  | "togglePolygon"
+  | "whiteboardMode";
 
 export type PanelComponentProps = {
   elements: readonly ExcalidrawElement[];

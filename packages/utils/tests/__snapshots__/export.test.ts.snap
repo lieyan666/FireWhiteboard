@@ -111,6 +111,7 @@ exports[`exportToSvg > with default arguments 1`] = `
   "userToFollow": null,
   "viewBackgroundColor": "#ffffff",
   "viewModeEnabled": false,
+  "whiteboardMode": false,
   "zenModeEnabled": false,
   "zoom": {
     "value": 1,

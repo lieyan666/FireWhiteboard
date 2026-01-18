@@ -33,6 +33,48 @@
   color: var(--text-primary-color);
 }
 
+.zoom-reset-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.zoom-reset-wrapper--lock {
+  .reset-zoom-button {
+    padding-right: 1.625rem !important;
+    width: 4.25rem !important;
+  }
+}
+
+.zoom-lock-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.5rem;
+  height: 100%;
+  border-left: 1px solid var(--color-surface-lowest);
+  z-index: 1;
+
+  svg {
+    width: 1rem !important;
+    height: 1rem !important;
+  }
+}
+
+:root[dir="rtl"] .zoom-reset-wrapper--lock {
+  .reset-zoom-button {
+    padding-right: 0.625rem !important;
+    padding-left: 1.625rem !important;
+  }
+
+  .zoom-lock-button {
+    right: auto;
+    left: 0;
+    border-left: 0;
+    border-right: 1px solid var(--color-surface-lowest);
+  }
+}
+
 .zoom-out-button {
   border-top-left-radius: var(--border-radius-lg) !important;
   border-bottom-left-radius: var(--border-radius-lg) !important;

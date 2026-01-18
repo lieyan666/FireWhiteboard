@@ -1900,6 +1900,20 @@ class App extends React.Component<AppProps, AppState> {
 
     const showShapeSwitchPanel =
       editorJotaiStore.get(convertElementTypePopupAtom)?.type === "panel";
+    const whiteboardToolbarScale = clamp(
+      Number.isFinite(this.state.whiteboardToolbarScale)
+        ? this.state.whiteboardToolbarScale
+        : 1,
+      0.6,
+      2,
+    );
+    const whiteboardSideControlsScale = clamp(
+      Number.isFinite(this.state.whiteboardSideControlsScale)
+        ? this.state.whiteboardSideControlsScale
+        : 1,
+      0.6,
+      2,
+    );
 
     return (
       <div
@@ -1915,6 +1929,12 @@ class App extends React.Component<AppProps, AppState> {
             ? POINTER_EVENTS.disabled
             : POINTER_EVENTS.enabled,
           ["--right-sidebar-width" as any]: "302px",
+          ["--whiteboard-toolbar-scale" as any]: this.state.whiteboardMode
+            ? whiteboardToolbarScale
+            : 1,
+          ["--whiteboard-side-controls-scale" as any]: this.state.whiteboardMode
+            ? whiteboardSideControlsScale
+            : 1,
         }}
         ref={this.excalidrawContainerRef}
         onDrop={this.handleAppOnDrop}
@@ -6231,8 +6251,13 @@ class App extends React.Component<AppProps, AppState> {
       gesture.lastCenter = center;
 
       const distance = getDistance(Array.from(gesture.pointers.values()));
+      const isTouchZoomLocked =
+        this.state.whiteboardMode &&
+        this.state.zoomLocked &&
+        this.isTouchScreenMultiTouchGesture();
       const scaleFactor =
-        this.state.activeTool.type === "freedraw" && this.state.penMode
+        isTouchZoomLocked ||
+        (this.state.activeTool.type === "freedraw" && this.state.penMode)
           ? 1
           : distance / gesture.initialDistance;
 

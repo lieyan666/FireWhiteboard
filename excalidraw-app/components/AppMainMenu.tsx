@@ -2,11 +2,21 @@ import {
   loginIcon,
   ExcalLogo,
   eyeIcon,
+  share,
+  shield,
+  LibraryIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { MainMenu } from "@excalidraw/excalidraw/index";
 import React from "react";
 
-import { isDevEnv } from "@excalidraw/common";
+import {
+  DEFAULT_SIDEBAR,
+  LIBRARY_SIDEBAR_TAB,
+  isDevEnv,
+} from "@excalidraw/common";
+import { useExcalidrawSetAppState } from "@excalidraw/excalidraw/components/App";
+import { useUIAppState } from "@excalidraw/excalidraw/context/ui-appState";
+import { useI18n } from "@excalidraw/excalidraw/i18n";
 
 import type { Theme } from "@excalidraw/element/types";
 
@@ -17,12 +27,28 @@ import { saveDebugState } from "./DebugCanvas";
 
 export const AppMainMenu: React.FC<{
   onCollabDialogOpen: () => any;
+  onShareDialogOpen: () => any;
   isCollaborating: boolean;
   isCollabEnabled: boolean;
   theme: Theme | "system";
   setTheme: (theme: Theme | "system") => void;
   refresh: () => void;
 }> = React.memo((props) => {
+  const { t } = useI18n();
+  const appState = useUIAppState();
+  const setAppState = useExcalidrawSetAppState();
+
+  const WHITEBOARD_SCALE_MIN = 0.6;
+  const WHITEBOARD_SCALE_MAX = 2;
+  const WHITEBOARD_SCALE_STEP = 0.1;
+  const clampScale = (value: number) =>
+    Math.min(WHITEBOARD_SCALE_MAX, Math.max(WHITEBOARD_SCALE_MIN, value));
+
+  const toolbarScale = clampScale(appState.whiteboardToolbarScale ?? 1);
+  const sideControlsScale = clampScale(
+    appState.whiteboardSideControlsScale ?? 1,
+  );
+
   return (
     <MainMenu>
       <MainMenu.DefaultItems.LoadScene />
@@ -37,7 +63,41 @@ export const AppMainMenu: React.FC<{
       )}
       <MainMenu.DefaultItems.CommandPalette className="highlighted" />
       <MainMenu.DefaultItems.SearchMenu />
+      <MainMenu.Item
+        icon={LibraryIcon}
+        onSelect={() => {
+          setAppState((state) => ({
+            openSidebar:
+              state.openSidebar?.name === DEFAULT_SIDEBAR.name &&
+              state.openSidebar?.tab === LIBRARY_SIDEBAR_TAB
+                ? null
+                : { name: DEFAULT_SIDEBAR.name, tab: LIBRARY_SIDEBAR_TAB },
+            openMenu: null,
+            openPopup: null,
+          }));
+        }}
+        aria-label={t("toolBar.library")}
+      >
+        {t("toolBar.library")}
+      </MainMenu.Item>
       <MainMenu.DefaultItems.Help />
+      {appState.whiteboardMode && props.isCollabEnabled && (
+        <MainMenu.Item
+          icon={share}
+          onSelect={() => props.onShareDialogOpen()}
+          aria-label={t("labels.share")}
+        >
+          {t("labels.share")}
+        </MainMenu.Item>
+      )}
+      {appState.whiteboardMode && !isExcalidrawPlusSignedUser && (
+        <MainMenu.ItemLink
+          icon={shield}
+          href="https://plus.excalidraw.com/blog/end-to-end-encryption"
+        >
+          {t("encrypted.link")}
+        </MainMenu.ItemLink>
+      )}
       <MainMenu.DefaultItems.ClearCanvas />
       <MainMenu.Separator />
       <MainMenu.ItemLink
@@ -82,6 +142,56 @@ export const AppMainMenu: React.FC<{
         theme={props.theme}
         onSelect={props.setTheme}
       />
+      <MainMenu.DefaultItems.ToggleWhiteboardMode />
+      {appState.whiteboardMode && (
+        <MainMenu.ItemCustom className="whiteboard-scale-menu">
+          <div className="whiteboard-scale-menu__title">
+            Whiteboard scale
+          </div>
+          <div className="whiteboard-scale-menu__row">
+            <span className="whiteboard-scale-menu__label">Toolbar</span>
+            <input
+              className="whiteboard-scale-menu__slider"
+              type="range"
+              min={WHITEBOARD_SCALE_MIN}
+              max={WHITEBOARD_SCALE_MAX}
+              step={WHITEBOARD_SCALE_STEP}
+              value={toolbarScale}
+              aria-label="Whiteboard toolbar scale"
+              onChange={(event) => {
+                const nextValue = clampScale(
+                  Number(event.currentTarget.value),
+                );
+                setAppState({ whiteboardToolbarScale: nextValue });
+              }}
+            />
+            <span className="whiteboard-scale-menu__value">
+              {toolbarScale.toFixed(1)}x
+            </span>
+          </div>
+          <div className="whiteboard-scale-menu__row">
+            <span className="whiteboard-scale-menu__label">Side controls</span>
+            <input
+              className="whiteboard-scale-menu__slider"
+              type="range"
+              min={WHITEBOARD_SCALE_MIN}
+              max={WHITEBOARD_SCALE_MAX}
+              step={WHITEBOARD_SCALE_STEP}
+              value={sideControlsScale}
+              aria-label="Whiteboard side controls scale"
+              onChange={(event) => {
+                const nextValue = clampScale(
+                  Number(event.currentTarget.value),
+                );
+                setAppState({ whiteboardSideControlsScale: nextValue });
+              }}
+            />
+            <span className="whiteboard-scale-menu__value">
+              {sideControlsScale.toFixed(1)}x
+            </span>
+          </div>
+        </MainMenu.ItemCustom>
+      )}
       <MainMenu.ItemCustom>
         <LanguageList style={{ width: "100%" }} />
       </MainMenu.ItemCustom>

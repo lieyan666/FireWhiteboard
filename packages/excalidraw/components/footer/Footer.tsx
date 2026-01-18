@@ -1,11 +1,18 @@
 import clsx from "clsx";
 
-import { actionShortcuts } from "../../actions";
+import {
+  actionMovePageLeft,
+  actionMovePageRight,
+  actionShortcuts,
+} from "../../actions";
 import { useTunnels } from "../../context/tunnels";
 import { ExitZenModeButton, UndoRedoActions, ZoomActions } from "../Actions";
 import { HelpButton } from "../HelpButton";
 import { Section } from "../Section";
 import Stack from "../Stack";
+import { t } from "../../i18n";
+import { ToolButton } from "../ToolButton";
+import { chevronLeftIcon } from "../icons";
 
 import type { ActionManager } from "../../actions/manager";
 import type { UIAppState } from "../../types";
@@ -22,6 +29,7 @@ const Footer = ({
   renderWelcomeScreen: boolean;
 }) => {
   const { FooterCenterTunnel, WelcomeScreenHelpHintTunnel } = useTunnels();
+  const moveLabel = t("helpDialog.movePageLeftRight");
 
   return (
     <footer
@@ -36,10 +44,16 @@ const Footer = ({
       >
         <Stack.Col gap={2}>
           <Section heading="canvasActions">
-            <ZoomActions
-              renderAction={actionManager.renderAction}
-              zoom={appState.zoom}
-            />
+            <div
+              className={clsx({
+                "whiteboard-side-controls": appState.whiteboardMode,
+              })}
+            >
+              <ZoomActions
+                renderAction={actionManager.renderAction}
+                appState={appState}
+              />
+            </div>
 
             {!appState.viewModeEnabled && (
               <UndoRedoActions
@@ -59,12 +73,39 @@ const Footer = ({
           "transition-right": appState.zenModeEnabled,
         })}
       >
-        <div style={{ position: "relative" }}>
-          {renderWelcomeScreen && <WelcomeScreenHelpHintTunnel.Out />}
-          <HelpButton
-            onClick={() => actionManager.executeAction(actionShortcuts)}
-          />
-        </div>
+        {appState.whiteboardMode ? (
+          <Stack.Row gap={1} className="whiteboard-page-nav">
+            <ToolButton
+              type="button"
+              title={moveLabel}
+              aria-label={t("labels.left")}
+              icon={chevronLeftIcon}
+              onClick={() =>
+                actionManager.executeAction(actionMovePageLeft, "ui")
+              }
+            />
+            <ToolButton
+              type="button"
+              title={moveLabel}
+              aria-label={t("labels.right")}
+              icon={
+                <span style={{ display: "inline-flex", transform: "scaleX(-1)" }}>
+                  {chevronLeftIcon}
+                </span>
+              }
+              onClick={() =>
+                actionManager.executeAction(actionMovePageRight, "ui")
+              }
+            />
+          </Stack.Row>
+        ) : (
+          <div style={{ position: "relative" }}>
+            {renderWelcomeScreen && <WelcomeScreenHelpHintTunnel.Out />}
+            <HelpButton
+              onClick={() => actionManager.executeAction(actionShortcuts)}
+            />
+          </div>
+        )}
       </div>
       <ExitZenModeButton
         actionManager={actionManager}

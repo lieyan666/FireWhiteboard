@@ -1,3 +1,4 @@
+import { useUIAppState } from "@excalidraw/excalidraw/context/ui-appState";
 import { Footer } from "@excalidraw/excalidraw/index";
 import React from "react";
 
@@ -8,6 +9,8 @@ import { EncryptedIcon } from "./EncryptedIcon";
 
 export const AppFooter = React.memo(
   ({ onChange }: { onChange: () => void }) => {
+    const appState = useUIAppState();
+
     return (
       <Footer>
         <div
@@ -17,8 +20,12 @@ export const AppFooter = React.memo(
             alignItems: "center",
           }}
         >
-          {isVisualDebuggerEnabled() && <DebugFooter onChange={onChange} />}
-          {!isExcalidrawPlusSignedUser && <EncryptedIcon />}
+          {isVisualDebuggerEnabled() && !appState.whiteboardMode && (
+            <DebugFooter onChange={onChange} />
+          )}
+          {!isExcalidrawPlusSignedUser && !appState.whiteboardMode && (
+            <EncryptedIcon />
+          )}
         </div>
       </Footer>
     );

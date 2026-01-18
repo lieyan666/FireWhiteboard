@@ -24,9 +24,12 @@ export {
 export {
   actionChangeViewBackgroundColor,
   actionClearCanvas,
+  actionMovePageLeft,
+  actionMovePageRight,
   actionZoomIn,
   actionZoomOut,
   actionResetZoom,
+  actionToggleZoomLock,
   actionZoomToFit,
   actionToggleTheme,
 } from "./actionCanvas";
@@ -89,3 +92,5 @@ export { actionToggleLinearEditor } from "./actionLinearEditor";
 export { actionToggleSearchMenu } from "./actionToggleSearchMenu";
 
 export { actionToggleCropEditor } from "./actionCropEditor";
+
+export { actionToggleWhiteboardMode } from "./actionWhiteboardMode";

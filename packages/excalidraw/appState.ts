@@ -128,6 +128,10 @@ export const getDefaultAppState = (): Omit<
     lockedMultiSelections: {},
     activeLockedId: null,
     bindMode: "orbit",
+    whiteboardMode: false,
+    zoomLocked: true,
+    whiteboardToolbarScale: 1,
+    whiteboardSideControlsScale: 1,
   };
 };
 
@@ -254,6 +258,10 @@ const APP_STATE_STORAGE_CONF = (<
   lockedMultiSelections: { browser: true, export: true, server: true },
   activeLockedId: { browser: false, export: false, server: false },
   bindMode: { browser: true, export: false, server: false },
+  whiteboardMode: { browser: true, export: false, server: false },
+  zoomLocked: { browser: true, export: false, server: false },
+  whiteboardToolbarScale: { browser: true, export: false, server: false },
+  whiteboardSideControlsScale: { browser: true, export: false, server: false },
 });
 
 const _clearAppStateForStorage = <

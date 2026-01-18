@@ -11,6 +11,7 @@ import {
   actionShortcuts,
   actionToggleSearchMenu,
   actionToggleTheme,
+  actionToggleWhiteboardMode,
 } from "../../actions";
 import { getShortcutFromShortcutName } from "../../actions/shortcuts";
 import { trackEvent } from "../../analytics";
@@ -29,7 +30,7 @@ import Trans from "../Trans";
 import DropdownMenuItem from "../dropdownMenu/DropdownMenuItem";
 import DropdownMenuItemContentRadio from "../dropdownMenu/DropdownMenuItemContentRadio";
 import DropdownMenuItemLink from "../dropdownMenu/DropdownMenuItemLink";
-import { GithubIcon, DiscordIcon, XBrandIcon } from "../icons";
+import { GithubIcon } from "../icons";
 import {
   boltIcon,
   DeviceDesktopIcon,
@@ -43,6 +44,7 @@ import {
   SunIcon,
   TrashIcon,
   usersIcon,
+  FreedrawIcon,
 } from "../icons";
 
 import "./DefaultItems.scss";
@@ -340,35 +342,41 @@ export const Export = () => {
 Export.displayName = "Export";
 
 export const Socials = () => {
-  const { t } = useI18n();
-
   return (
     <>
       <DropdownMenuItemLink
         icon={GithubIcon}
-        href="https://github.com/excalidraw/excalidraw"
+        href="https://github.com/lieyan666/FireWhiteboard.git"
         aria-label="GitHub"
       >
         GitHub
-      </DropdownMenuItemLink>
-      <DropdownMenuItemLink
-        icon={XBrandIcon}
-        href="https://x.com/excalidraw"
-        aria-label="X"
-      >
-        {t("labels.followUs")}
-      </DropdownMenuItemLink>
-      <DropdownMenuItemLink
-        icon={DiscordIcon}
-        href="https://discord.gg/UexuTaE"
-        aria-label="Discord"
-      >
-        {t("labels.discordChat")}
       </DropdownMenuItemLink>
     </>
   );
 };
 Socials.displayName = "Socials";
+
+export const ToggleWhiteboardMode = () => {
+  const { t } = useI18n();
+  const appState = useUIAppState();
+  const actionManager = useExcalidrawActionManager();
+
+  return (
+    <DropdownMenuItem
+      onSelect={(event) => {
+        event.preventDefault();
+        actionManager.executeAction(actionToggleWhiteboardMode);
+      }}
+      icon={FreedrawIcon}
+      data-testid="toggle-whiteboard-mode"
+      aria-label={t("buttons.whiteboardMode")}
+    >
+      {t("buttons.whiteboardMode")}
+      {appState.whiteboardMode && " ✓"}
+    </DropdownMenuItem>
+  );
+};
+ToggleWhiteboardMode.displayName = "ToggleWhiteboardMode";
 
 export const LiveCollaborationTrigger = ({
   onSelect,

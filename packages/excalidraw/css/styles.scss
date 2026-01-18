@@ -500,6 +500,42 @@ body.excalidraw-cursor-resize * {
     }
   }
 
+  .whiteboard-scale-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .whiteboard-scale-menu__title {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+    opacity: 0.7;
+  }
+
+  .whiteboard-scale-menu__row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .whiteboard-scale-menu__label,
+  .whiteboard-scale-menu__value {
+    font-size: 0.75rem;
+    color: var(--text-primary-color);
+  }
+
+  .whiteboard-scale-menu__value {
+    min-width: 2.5rem;
+    text-align: right;
+  }
+
+  .whiteboard-scale-menu__slider {
+    width: 140px;
+    accent-color: var(--color-primary);
+  }
+
   .reset-zoom-button {
     font-family: var(--ui-font);
   }

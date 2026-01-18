@@ -31,9 +31,11 @@ import { Tooltip } from "../components/Tooltip";
 import {
   handIcon,
   LassoIcon,
+  LockedIcon,
   MoonIcon,
   SunIcon,
   TrashIcon,
+  UnlockedIcon,
   zoomAreaIcon,
   ZoomInIcon,
   ZoomOutIcon,
@@ -50,6 +52,11 @@ import { getShortcutKey } from "../shortcut";
 import { register } from "./register";
 
 import type { AppState, Offsets } from "../types";
+
+const PAGE_MOVE_FACTOR = 1.2;
+
+const getPageMoveDelta = (appState: Readonly<AppState>) =>
+  (appState.width * PAGE_MOVE_FACTOR) / appState.zoom.value;
 
 export const actionChangeViewBackgroundColor = register<Partial<AppState>>({
   name: "changeViewBackgroundColor",
@@ -255,6 +262,90 @@ export const actionResetZoom = register({
   keyTest: (event) =>
     (event.code === CODES.ZERO || event.code === CODES.NUM_ZERO) &&
     (event[KEYS.CTRL_OR_CMD] || event.shiftKey),
+});
+
+export const actionToggleZoomLock = register({
+  name: "toggleZoomLock",
+  label: (_elements, appState) =>
+    appState.zoomLocked ? "buttons.unlockZoom" : "buttons.lockZoom",
+  viewMode: true,
+  trackEvent: { category: "canvas" },
+  perform: (_elements, appState) => {
+    return {
+      appState: {
+        ...appState,
+        zoomLocked: !appState.zoomLocked,
+      },
+      captureUpdate: CaptureUpdateAction.EVENTUALLY,
+    };
+  },
+  PanelComponent: ({ updateData, appState }) => {
+    if (!appState.whiteboardMode) {
+      return null;
+    }
+    const label = appState.zoomLocked
+      ? t("buttons.unlockZoom")
+      : t("buttons.lockZoom");
+    return (
+      <ToolButton
+        type="button"
+        className="zoom-lock-button zoom-button"
+        icon={appState.zoomLocked ? LockedIcon : UnlockedIcon}
+        title={label}
+        aria-label={label}
+        selected={appState.zoomLocked}
+        onClick={() => {
+          updateData(null);
+        }}
+      />
+    );
+  },
+});
+
+export const actionMovePageLeft = register({
+  name: "movePageLeft",
+  label: "helpDialog.movePageLeftRight",
+  viewMode: true,
+  trackEvent: { category: "canvas" },
+  perform: (_elements, appState) => {
+    const delta = getPageMoveDelta(appState);
+
+    if (!delta) {
+      return false;
+    }
+
+    return {
+      appState: {
+        ...appState,
+        scrollX: appState.scrollX + delta,
+        userToFollow: null,
+      },
+      captureUpdate: CaptureUpdateAction.NEVER,
+    };
+  },
+});
+
+export const actionMovePageRight = register({
+  name: "movePageRight",
+  label: "helpDialog.movePageLeftRight",
+  viewMode: true,
+  trackEvent: { category: "canvas" },
+  perform: (_elements, appState) => {
+    const delta = getPageMoveDelta(appState);
+
+    if (!delta) {
+      return false;
+    }
+
+    return {
+      appState: {
+        ...appState,
+        scrollX: appState.scrollX - delta,
+        userToFollow: null,
+      },
+      captureUpdate: CaptureUpdateAction.NEVER,
+    };
+  },
 });
 
 const zoomValueToFitBoundsOnViewport = (

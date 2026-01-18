@@ -118,6 +118,16 @@
       margin-top: auto;
       margin-bottom: auto;
     }
+
+    .whiteboard-side-controls {
+      transform: scale(var(--whiteboard-side-controls-scale, 1));
+      transform-origin: left center;
+    }
+
+    .whiteboard-page-nav {
+      transform: scale(var(--whiteboard-side-controls-scale, 1));
+      transform-origin: right center;
+    }
   }
 
   .disable-view-mode {
