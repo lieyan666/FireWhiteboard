@@ -125,7 +125,7 @@
     }
 
     .whiteboard-page-nav {
-      transform: scale(var(--whiteboard-side-controls-scale, 1));
+      transform: scale(var(--whiteboard-page-nav-scale, 1));
       transform-origin: right center;
     }
   }

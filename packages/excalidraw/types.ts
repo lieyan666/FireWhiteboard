@@ -468,6 +468,8 @@ export interface AppState {
   whiteboardToolbarScale: number;
   /** whiteboard side controls UI scale (1 = default) */
   whiteboardSideControlsScale: number;
+  /** whiteboard page navigation UI scale (1 = default) */
+  whiteboardPageNavScale: number;
 }
 
 export type SearchMatch = {

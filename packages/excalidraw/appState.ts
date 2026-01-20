@@ -132,6 +132,7 @@ export const getDefaultAppState = (): Omit<
     zoomLocked: true,
     whiteboardToolbarScale: 1,
     whiteboardSideControlsScale: 1,
+    whiteboardPageNavScale: 1,
   };
 };
 
@@ -263,6 +264,7 @@ const APP_STATE_STORAGE_CONF = (<
   zoomLocked: { browser: true, export: false, server: false },
   whiteboardToolbarScale: { browser: true, export: false, server: false },
   whiteboardSideControlsScale: { browser: true, export: false, server: false },
+  whiteboardPageNavScale: { browser: true, export: false, server: false },
 });
 
 const _clearAppStateForStorage = <
