@@ -445,14 +445,22 @@ export const newFreeDrawElement = (
     points?: ExcalidrawFreeDrawElement["points"];
     simulatePressure: boolean;
     pressures?: ExcalidrawFreeDrawElement["pressures"];
+    freedrawSmoothingEnabled?: ExcalidrawFreeDrawElement["freedrawSmoothingEnabled"];
   } & ElementConstructorOpts,
 ): NonDeleted<ExcalidrawFreeDrawElement> => {
-  return {
+  const element = {
     ..._newElementBase<ExcalidrawFreeDrawElement>(opts.type, opts),
     points: opts.points || [],
     pressures: opts.pressures || [],
     simulatePressure: opts.simulatePressure,
   };
+  if (opts.freedrawSmoothingEnabled === false) {
+    return {
+      ...element,
+      freedrawSmoothingEnabled: false,
+    };
+  }
+  return element;
 };
 
 export const newLinearElement = (

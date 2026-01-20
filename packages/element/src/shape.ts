@@ -1059,13 +1059,14 @@ export const getFreedrawOutlinePoints = (
     : element.points.length
     ? element.points.map(([x, y], i) => [x, y, element.pressures[i]])
     : [[0, 0, 0.5]];
+  const smoothingEnabled = element.freedrawSmoothingEnabled ?? true;
 
   return getStroke(inputPoints as number[][], {
     simulatePressure: element.simulatePressure,
     size: element.strokeWidth * 4.25,
     thinning: 0.6,
-    smoothing: 0.5,
-    streamline: 0.5,
+    smoothing: smoothingEnabled ? 0.5 : 0,
+    streamline: smoothingEnabled ? 0.5 : 0,
     easing: (t) => Math.sin((t * Math.PI) / 2), // https://easings.net/#easeOutSine
     last: true,
   }) as [number, number][];

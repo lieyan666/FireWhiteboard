@@ -230,6 +230,8 @@
     "systemMode": "System mode",
     "zenMode": "Zen mode",
     "whiteboardMode": "Whiteboard mode",
+    "enableStrokeStabilization": "Enable stroke prediction & stabilization",
+    "disableStrokeStabilization": "Disable stroke prediction & stabilization",
     "objectsSnapMode": "Snap to objects",
     "exitZenMode": "Exit zen mode",
     "cancel": "Cancel",
