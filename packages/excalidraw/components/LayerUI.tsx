@@ -63,6 +63,7 @@ import { Island } from "./Island";
 import { JSONExportDialog } from "./JSONExportDialog";
 import { LaserPointerButton } from "./LaserPointerButton";
 import { WhiteboardToolbar } from "./WhiteboardToolbar";
+import { WhiteboardOnboardingDialog } from "./WhiteboardOnboardingDialog";
 
 import "./LayerUI.scss";
 import "./Toolbar.scss";
@@ -188,6 +189,53 @@ const LayerUI = ({
   const TunnelsJotaiProvider = tunnels.tunnelsJotai.Provider;
 
   const [eyeDropperState, setEyeDropperState] = useAtom(activeEyeDropperAtom);
+  const [showWhiteboardOnboarding, setShowWhiteboardOnboarding] =
+    React.useState(false);
+  const [whiteboardOnboardingDismissed, setWhiteboardOnboardingDismissed] =
+    React.useState(false);
+  const previousWhiteboardModeRef = React.useRef(appState.whiteboardMode);
+
+  React.useEffect(() => {
+    if (previousWhiteboardModeRef.current !== appState.whiteboardMode) {
+      if (appState.whiteboardMode) {
+        setWhiteboardOnboardingDismissed(false);
+        if (!document.fullscreenElement) {
+          setShowWhiteboardOnboarding(true);
+        }
+      } else {
+        setShowWhiteboardOnboarding(false);
+      }
+      previousWhiteboardModeRef.current = appState.whiteboardMode;
+    }
+  }, [appState.whiteboardMode]);
+
+  React.useEffect(() => {
+    if (!appState.whiteboardMode || whiteboardOnboardingDismissed) {
+      return;
+    }
+
+    if (document.fullscreenElement) {
+      setShowWhiteboardOnboarding(false);
+      return;
+    }
+
+    setShowWhiteboardOnboarding(true);
+  }, [appState.whiteboardMode, whiteboardOnboardingDismissed]);
+
+  React.useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (document.fullscreenElement) {
+        setShowWhiteboardOnboarding(false);
+        setWhiteboardOnboardingDismissed(true);
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
 
   const renderJSONExportDialog = () => {
     if (!UIOptions.canvasActions.export) {
@@ -493,6 +541,14 @@ const LayerUI = ({
           {appState.errorMessage}
         </ErrorDialog>
       )}
+      <WhiteboardOnboardingDialog
+        open={showWhiteboardOnboarding}
+        canEnterFullscreen={Boolean(document.fullscreenEnabled)}
+        onDismiss={() => {
+          setShowWhiteboardOnboarding(false);
+          setWhiteboardOnboardingDismissed(true);
+        }}
+      />
       {eyeDropperState && editorInterface.formFactor !== "phone" && (
         <EyeDropper
           colorPickerType={eyeDropperState.colorPickerType}
