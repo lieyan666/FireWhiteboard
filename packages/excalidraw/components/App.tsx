@@ -2810,7 +2810,7 @@ class App extends React.Component<AppProps, AppState> {
 
   private getFormFactor = (editorWidth: number, editorHeight: number) => {
     return (
-      this.props.UIOptions.formFactor ??
+      this.props.UIOptions.getFormFactor?.(editorWidth, editorHeight) ??
       getFormFactor(editorWidth, editorHeight)
     );
   };
@@ -2834,10 +2834,7 @@ class App extends React.Component<AppProps, AppState> {
         ? this.props.UIOptions.dockedSidebarBreakpoint
         : MQ_RIGHT_SIDEBAR_MIN_WIDTH;
     const nextEditorInterface = updateObject(this.editorInterface, {
-      desktopUIMode:
-        this.props.UIOptions.desktopUIMode ??
-        storedDesktopUIMode ??
-        this.editorInterface.desktopUIMode,
+      desktopUIMode: storedDesktopUIMode ?? this.editorInterface.desktopUIMode,
       formFactor: this.getFormFactor(editorWidth, editorHeight),
       userAgent: userAgentDescriptor,
       canFitSidebar: editorWidth > sidebarBreakpoint,
@@ -10091,7 +10088,7 @@ class App extends React.Component<AppProps, AppState> {
             });
           }
         } else if (pointerDownState.drag.hasOccurred && !multiElement) {
-          if (isBindingElement(newElement, false)) {
+          if (isLinearElement(newElement)) {
             this.actionManager.executeAction(actionFinalize, "ui", {
               event: childEvent,
               sceneCoords,
