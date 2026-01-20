@@ -5,6 +5,7 @@ import {
   share,
   shield,
   LibraryIcon,
+  FreedrawIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { MainMenu } from "@excalidraw/excalidraw/index";
 import React from "react";
@@ -48,6 +49,7 @@ export const AppMainMenu: React.FC<{
   const sideControlsScale = clampScale(
     appState.whiteboardSideControlsScale ?? 1,
   );
+  const freedrawSmoothingEnabled = appState.freedrawSmoothingEnabled ?? true;
 
   return (
     <MainMenu>
@@ -143,6 +145,25 @@ export const AppMainMenu: React.FC<{
         onSelect={props.setTheme}
       />
       <MainMenu.DefaultItems.ToggleWhiteboardMode />
+      {appState.whiteboardMode && (
+        <MainMenu.Item
+          icon={FreedrawIcon}
+          onSelect={() => {
+            setAppState({
+              freedrawSmoothingEnabled: !freedrawSmoothingEnabled,
+            });
+          }}
+          aria-label={
+            freedrawSmoothingEnabled
+              ? t("buttons.disableStrokeStabilization")
+              : t("buttons.enableStrokeStabilization")
+          }
+        >
+          {freedrawSmoothingEnabled
+            ? t("buttons.disableStrokeStabilization")
+            : t("buttons.enableStrokeStabilization")}
+        </MainMenu.Item>
+      )}
       {appState.whiteboardMode && (
         <MainMenu.ItemCustom className="whiteboard-scale-menu">
           <div className="whiteboard-scale-menu__title">

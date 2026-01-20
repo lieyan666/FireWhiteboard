@@ -377,6 +377,7 @@ export type ExcalidrawFreeDrawElement = _ExcalidrawElementBase &
     points: readonly LocalPoint[];
     pressures: readonly number[];
     simulatePressure: boolean;
+    freedrawSmoothingEnabled?: boolean;
   }>;
 
 export type FileId = string & { _brand: "FileId" };

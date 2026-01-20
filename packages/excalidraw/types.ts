@@ -460,6 +460,8 @@ export interface AppState {
   bindMode: BindMode;
   /** classroom whiteboard mode - simplified toolbar at bottom */
   whiteboardMode: boolean;
+  /** enable stroke prediction/jitter smoothing for freedraw */
+  freedrawSmoothingEnabled?: boolean;
   /** lock touch zoom in whiteboard mode */
   zoomLocked: boolean;
   /** whiteboard toolbar UI scale (1 = default) */

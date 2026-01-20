@@ -229,6 +229,8 @@
     "lightMode": "浅色模式",
     "systemMode": "系统模式",
     "zenMode": "禅模式",
+    "enableStrokeStabilization": "开启笔迹预测/抖动修复",
+    "disableStrokeStabilization": "关闭笔迹预测/抖动修复",
     "objectsSnapMode": "吸附至对象",
     "exitZenMode": "退出禅模式",
     "cancel": "取消",

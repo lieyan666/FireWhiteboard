@@ -387,6 +387,9 @@ export const restoreElement = (
         points: element.points,
         simulatePressure: element.simulatePressure,
         pressures: element.pressures,
+        ...(element.freedrawSmoothingEnabled === false
+          ? { freedrawSmoothingEnabled: false }
+          : {}),
       });
     }
     case "image":
