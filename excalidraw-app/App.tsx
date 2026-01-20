@@ -369,6 +369,7 @@ const initializeScene = async (opts: {
 const ExcalidrawWrapper = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const isCollabDisabled = isRunningInIframe();
+  const [showBuildInfo, setShowBuildInfo] = useState(!isTestEnv());
 
   const { editorTheme, appTheme, setAppTheme } = useHandleAppTheme();
 
@@ -396,6 +397,20 @@ const ExcalidrawWrapper = () => {
       trackEvent("load", "version", getVersion());
     }, VERSION_TIMEOUT);
   }, []);
+
+  useEffect(() => {
+    if (!showBuildInfo) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowBuildInfo(false);
+    }, 3000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [showBuildInfo]);
 
   const [excalidrawAPI, excalidrawRefCallback] =
     useCallbackRefState<ExcalidrawImperativeAPI>();
@@ -833,6 +848,30 @@ const ExcalidrawWrapper = () => {
     },
   };
 
+  const buildTime = import.meta.env.VITE_APP_BUILD_TIME;
+  const buildInfoItems = [
+    {
+      icon: "🗂️",
+      label: "Repo",
+      value: import.meta.env.VITE_APP_GIT_REPO || "unknown",
+    },
+    {
+      icon: "🌿",
+      label: "Branch",
+      value: import.meta.env.VITE_APP_GIT_BRANCH || "unknown",
+    },
+    {
+      icon: "🔖",
+      label: "Commit",
+      value: import.meta.env.VITE_APP_GIT_SHA || "unknown",
+    },
+    {
+      icon: "⏱️",
+      label: "Built",
+      value: buildTime ? new Date(buildTime).toLocaleString() : "unknown",
+    },
+  ];
+
   return (
     <div
       style={{ height: "100%" }}
@@ -840,6 +879,22 @@ const ExcalidrawWrapper = () => {
         "is-collaborating": isCollaborating,
       })}
     >
+      {showBuildInfo && (
+        <div className="build-info-toast" role="status" aria-live="polite">
+          <div className="build-info-toast__title">Build info</div>
+          <ul className="build-info-toast__list">
+            {buildInfoItems.map((item) => (
+              <li key={item.label} className="build-info-toast__item">
+                <span className="build-info-toast__icon" aria-hidden="true">
+                  {item.icon}
+                </span>
+                <span className="build-info-toast__label">{item.label}:</span>
+                <span className="build-info-toast__value">{item.value}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <Excalidraw
         excalidrawAPI={excalidrawRefCallback}
         onChange={onChange}
