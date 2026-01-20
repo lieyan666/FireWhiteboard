@@ -49,6 +49,7 @@ export const AppMainMenu: React.FC<{
   const sideControlsScale = clampScale(
     appState.whiteboardSideControlsScale ?? 1,
   );
+  const pageNavScale = clampScale(appState.whiteboardPageNavScale ?? 1);
   const freedrawSmoothingEnabled = appState.freedrawSmoothingEnabled ?? true;
 
   return (
@@ -209,6 +210,27 @@ export const AppMainMenu: React.FC<{
             />
             <span className="whiteboard-scale-menu__value">
               {sideControlsScale.toFixed(1)}x
+            </span>
+          </div>
+          <div className="whiteboard-scale-menu__row">
+            <span className="whiteboard-scale-menu__label">Page nav</span>
+            <input
+              className="whiteboard-scale-menu__slider"
+              type="range"
+              min={WHITEBOARD_SCALE_MIN}
+              max={WHITEBOARD_SCALE_MAX}
+              step={WHITEBOARD_SCALE_STEP}
+              value={pageNavScale}
+              aria-label="Whiteboard page navigation scale"
+              onChange={(event) => {
+                const nextValue = clampScale(
+                  Number(event.currentTarget.value),
+                );
+                setAppState({ whiteboardPageNavScale: nextValue });
+              }}
+            />
+            <span className="whiteboard-scale-menu__value">
+              {pageNavScale.toFixed(1)}x
             </span>
           </div>
         </MainMenu.ItemCustom>

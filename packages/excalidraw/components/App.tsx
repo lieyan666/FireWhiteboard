@@ -1914,6 +1914,13 @@ class App extends React.Component<AppProps, AppState> {
       0.6,
       2,
     );
+    const whiteboardPageNavScale = clamp(
+      Number.isFinite(this.state.whiteboardPageNavScale)
+        ? this.state.whiteboardPageNavScale
+        : 1,
+      0.6,
+      2,
+    );
 
     return (
       <div
@@ -1934,6 +1941,9 @@ class App extends React.Component<AppProps, AppState> {
             : 1,
           ["--whiteboard-side-controls-scale" as any]: this.state.whiteboardMode
             ? whiteboardSideControlsScale
+            : 1,
+          ["--whiteboard-page-nav-scale" as any]: this.state.whiteboardMode
+            ? whiteboardPageNavScale
             : 1,
         }}
         ref={this.excalidrawContainerRef}
