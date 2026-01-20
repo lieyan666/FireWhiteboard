@@ -273,6 +273,7 @@
     "fileTooBig": "文件过大。最大允许的大小为 {{maxSize}}。",
     "svgImageInsertError": "无法插入 SVG 图像。该 SVG 标记似乎是无效的。",
     "failedToFetchImage": "无法获取图片。",
+    "cannotEnterFullscreen": "无法进入全屏模式，请重试。",
     "cannotResolveCollabServer": "无法连接到实时协作服务器。请重新加载页面并重试。",
     "importLibraryError": "无法加载素材库",
     "saveLibraryError": "无法将库保存至存储。请将库保存为本地文件，以确保您的更改不被丢失。",
@@ -293,6 +294,12 @@
     "asyncPasteFailedOnRead": "无法粘贴（无法读取系统剪贴板）。",
     "asyncPasteFailedOnParse": "无法粘贴。",
     "copyToSystemClipboardFailed": "无法复制到剪贴板。"
+  },
+  "whiteboardOnboarding": {
+    "title": "白板模式",
+    "description": "为了获得更好的展示/教学体验，建议切换到全屏模式。",
+    "dismiss": "稍后再说",
+    "enterFullscreen": "进入全屏"
   },
   "toolBar": {
     "selection": "选择",

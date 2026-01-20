@@ -274,6 +274,7 @@
     "fileTooBig": "File is too big. Maximum allowed size is {{maxSize}}.",
     "svgImageInsertError": "Couldn't insert SVG image. The SVG markup looks invalid.",
     "failedToFetchImage": "Failed to fetch image.",
+    "cannotEnterFullscreen": "Couldn't enter fullscreen. Please try again.",
     "cannotResolveCollabServer": "Couldn't connect to the collab server. Please reload the page and try again.",
     "importLibraryError": "Couldn't load library",
     "saveLibraryError": "Couldn't save library to storage. Please save your library to a file locally to make sure you don't lose changes.",
@@ -294,6 +295,12 @@
     "asyncPasteFailedOnRead": "Couldn't paste (couldn't read from system clipboard).",
     "asyncPasteFailedOnParse": "Couldn't paste.",
     "copyToSystemClipboardFailed": "Couldn't copy to clipboard."
+  },
+  "whiteboardOnboarding": {
+    "title": "Whiteboard mode",
+    "description": "For the best experience, switch to fullscreen while presenting or teaching.",
+    "dismiss": "Maybe later",
+    "enterFullscreen": "Enter fullscreen"
   },
   "toolBar": {
     "selection": "Selection",
